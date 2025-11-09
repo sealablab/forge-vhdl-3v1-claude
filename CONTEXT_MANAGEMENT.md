@@ -139,8 +139,9 @@ AI Agent now has:
    - `tools/forge-codegen/forge_codegen/templates/main.vhd.j2` - Main template
 
 3. **Test files** (when debugging)
-   - `tools/forge-codegen/tests/test_*.py` - Code generation tests
-   - `libs/forge-vhdl/tests/test_*.py` - VHDL component tests
+   - `tools/forge-codegen/python_tests/test_*.py` - Code generation tests
+   - `libs/forge-vhdl/python_tests/test_*.py` - Python utility tests
+   - `libs/forge-vhdl/cocotb_tests/` - VHDL simulation tests
 
 **What you get:**
 - Actual implementation code

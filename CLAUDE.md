@@ -1,42 +1,74 @@
 # forge-vhdl Design and Testing Guide
 
 **Version:** 3.1.0
-**Purpose:** VHDL utilities with token-efficient AI-assisted testing
+**Purpose:** Cloud-first VHDL utilities with token-efficient AI-assisted testing
 **Audience:** Human developers and AI agents
+**Deployment:** Works in Claude Code Web, GitHub Codespaces, local environments
 
 ---
 
 ## Project Overview
 
-**forge-vhdl** provides reusable VHDL components for Moku custom instrument development,
+**forge-vhdl** is a cloud-first VHDL framework for Moku custom instrument development,
 with CocoTB progressive testing infrastructure optimized for LLM-friendly iteration.
 
 **Key Innovation:** 98% test output reduction (287 lines → 8 lines) through GHDL
 output filtering + progressive test levels (P1/P2/P3/P4).
 
+**Cloud-Ready:** Full VHDL simulation and testing in your browser - no local toolchain required!
+
 ---
 
-## Quick Start: Cloud Setup
+## Quick Start: Cloud Setup (RECOMMENDED)
 
-**For GitHub Codespaces / Claude Code Web / Docker environments:**
+**🌐 Works in Claude Code Web, GitHub Codespaces, any containerized environment:**
 
 ```bash
 uv run python scripts/cloud_setup_with_ghdl.py
 ```
 
 This automated setup script:
-- ✅ Auto-installs GHDL + LLVM 18 (Ubuntu/Debian)
+- ✅ Auto-installs GHDL + LLVM 18 (Ubuntu/Debian containers)
 - ✅ Creates LLVM library symlink (critical for GHDL-LLVM)
 - ✅ Sets up Python virtual environment with UV
 - ✅ Installs workspace packages in editable mode
-- ✅ Validates environment with sample test
-- ✅ Reports readiness status (~3-5 minutes)
+- ✅ Validates environment with sample VHDL simulation
+- ✅ Reports readiness status
+- ⏱️ Complete setup in ~2-3 minutes
 
-**Validation:** Expected to pass 5/10 tests (50% baseline - see `docs/CLOUD_SETUP_PROMPT.md`)
+**Result:** Full VHDL development environment ready to use!
+
+**Detailed guide:** `docs/CLOUD_SETUP_PROMPT.md` - Complete cloud deployment walkthrough
+
+**DevContainer:** Repository includes `.devcontainer/devcontainer.json` for automatic setup in:
+- GitHub Codespaces (click "Code" → "Create codespace")
+- VS Code Remote Containers (click "Reopen in Container")
+- Claude Code Web (runs automatically on first checkout)
+
+**Validation:** Test runner will show available tests. Expected baseline: 5-10 passing tests.
 
 **Troubleshooting:** See `docs/diagnostic_reports/` for known issues and fixes.
 
-**Local development:** Requires pre-installed GHDL (`brew install ghdl` or `apt-get install ghdl`)
+---
+
+## Quick Start: Local Development
+
+**For local development with pre-installed GHDL:**
+
+```bash
+# Install GHDL first (one-time)
+# Ubuntu/Debian: sudo apt-get install ghdl ghdl-llvm
+# macOS: brew install ghdl
+
+# Clone and setup
+git clone <repo-url>
+cd forge-vhdl-3v1-claude
+./scripts/setup.sh
+
+# Verify
+./scripts/validate_setup.sh
+uv run python cocotb_tests/run.py --list
+```
 
 ---
 
@@ -277,9 +309,9 @@ Default to silence. Escalate consciously. Preserve context religiously.
 
 **Directory Organization:**
 ```
-tests/
+cocotb_tests/
 ├── test_base.py                          # Base class (DO NOT MODIFY)
-├── <module_name>_tests/                  # Per-module directory (REQUIRED)
+├── components/<module_name>_tests/       # Per-module directory (REQUIRED)
 │   ├── <module_name>_constants.py        # Shared constants (REQUIRED)
 │   ├── P1_<module_name>_basic.py         # Minimal tests (REQUIRED)
 │   ├── P2_<module_name>_intermediate.py  # Standard tests (OPTIONAL)
@@ -331,16 +363,16 @@ class TestValues:
 
 ```bash
 # Default (LLM-optimized, P1 only)
-uv run python tests/run.py <module>
+uv run python cocotb_tests/run.py <module>
 
 # P2 (comprehensive validation)
-TEST_LEVEL=P2_INTERMEDIATE uv run python tests/run.py <module>
+TEST_LEVEL=P2_INTERMEDIATE uv run python cocotb_tests/run.py <module>
 
 # With more verbosity
-COCOTB_VERBOSITY=NORMAL uv run python tests/run.py <module>
+COCOTB_VERBOSITY=NORMAL uv run python cocotb_tests/run.py <module>
 
 # List all tests
-uv run python tests/run.py --list
+uv run python cocotb_tests/run.py --list
 ```
 
 ### Critical Rules

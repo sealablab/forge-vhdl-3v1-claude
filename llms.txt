@@ -1,11 +1,12 @@
 # moku-instrument-forge-vhdl
 
-Shared VHDL utilities for Moku custom instrument development with CocoTB progressive testing.
+**Cloud-first VHDL framework for Moku custom instrument development with AI-assisted workflows**
 
 ## Quick Reference
 
 **What:** Reusable VHDL components with token-efficient CocoTB tests
-**Use:** Git submodule in forge-based projects
+**Where:** Works in Claude Code Web, GitHub Codespaces, local environments
+**Cloud Setup:** One command: `uv run python scripts/cloud_setup_with_ghdl.py`
 **Test:** CocoTB + GHDL filter (P1 tests <20 lines, 98% noise reduction)
 
 ## Structure
@@ -17,12 +18,14 @@ vhdl/
 │   ├── forge_serialization_*_pkg    # Register serialization (types, voltage, time)
 │   ├── forge_common_pkg             # FORGE_READY control scheme
 │   └── forge_lut_pkg                # Look-up table utilities
-├── utilities/      # forge_util_clk_divider (+ tests), threshold trigger
-├── debugging/      # fsm_observer (real-time FSM monitoring)
-└── loader/         # forge_bram_loader (BRAM initialization)
+├── components/
+│   ├── utilities/      # forge_util_clk_divider, threshold trigger
+│   ├── debugging/      # forge_hierarchical_encoder, fsm_observer
+│   └── loader/         # forge_bram_loader (BRAM initialization)
 
-scripts/            # ghdl_output_filter.py (THE secret weapon)
-tests/              # CocoTB progressive testing infrastructure
+cocotb_tests/       # VHDL simulation tests (CocoTB + GHDL)
+python_tests/       # Python unit tests (pytest for Python utilities)
+scripts/            # ghdl_output_filter.py, cloud_setup_with_ghdl.py
 docs/               # Testing standards, guides, patterns
 ```
 
@@ -140,18 +143,38 @@ docs/               # Testing standards, guides, patterns
 2. **cocotb-progressive-test-designer** - Analyzes .vhl → Designs tests
 3. **cocotb-progressive-test-runner** - Implements tests
 
-## Testing (NEW!)
+## Testing
+
+### VHDL Simulation Tests (CocoTB + GHDL)
+
+**Purpose:** Test VHDL components via simulation
 
 ```bash
 # Run P1 tests (LLM-optimized, <20 lines)
-uv run python tests/run.py forge_util_clk_divider
+uv run python cocotb_tests/run.py forge_util_clk_divider
 
 # Run P2 tests (full validation)
-TEST_LEVEL=P2_INTERMEDIATE uv run python tests/run.py forge_util_clk_divider
+TEST_LEVEL=P2_INTERMEDIATE uv run python cocotb_tests/run.py forge_util_clk_divider
 
-# List all tests
-uv run python tests/run.py --list
+# List all VHDL tests
+uv run python cocotb_tests/run.py --list
 ```
+
+### Python Unit Tests (pytest)
+
+**Purpose:** Test Python utilities (HVS decoder, GHDL filter, etc.)
+
+```bash
+# Run all Python unit tests
+pytest python_tests/
+
+# Run with coverage
+pytest python_tests/ --cov=python/
+```
+
+**CRITICAL DISTINCTION:**
+- `cocotb_tests/` = VHDL simulation (CocoTB runner, GHDL simulator)
+- `python_tests/` = Python unit tests (pytest runner, no VHDL)
 
 ## Integration Pattern
 
@@ -163,51 +186,69 @@ git submodule add https://github.com/sealablab/moku-instrument-forge-vhdl.git li
 
 VHDL files compiled with GHDL via CocoTB test infrastructure.
 
-## Cloud Setup (For GitHub Codespaces / Claude Code Web)
+## Cloud Setup (Recommended - Works Everywhere!)
 
-**🚀 Automated setup with GHDL installation:**
+**🌐 One-command setup for Claude Code Web, GitHub Codespaces, or any container:**
 
 ```bash
 uv run python scripts/cloud_setup_with_ghdl.py
 ```
 
-This script will:
-- Auto-install GHDL + LLVM 18 (Ubuntu/Debian)
-- Create LLVM library symlink (critical!)
-- Set up Python packages in editable mode
-- Validate environment with tests
-- Report readiness status
+**What it does:**
+- ✅ Auto-installs GHDL + LLVM 18 (Ubuntu/Debian containers)
+- ✅ Creates LLVM library symlink (critical for GHDL-LLVM)
+- ✅ Sets up Python virtual environment with UV
+- ✅ Installs all packages in editable mode
+- ✅ Runs validation test to confirm VHDL simulation works
+- ⏱️ Complete setup in ~2-3 minutes
 
-**See:** `docs/CLOUD_SETUP_PROMPT.md` for detailed cloud deployment guide.
+**Result:** Full VHDL development environment in your browser!
 
-## Local Development
+**Detailed guide:** `docs/CLOUD_SETUP_PROMPT.md`
+
+**DevContainer:** Repository includes `.devcontainer/devcontainer.json` for automatic setup in GitHub Codespaces or VS Code Remote Containers.
+
+## Local Development (Pre-installed GHDL)
 
 ```bash
-uv sync                          # Install dependencies
-uv run python tests/run.py --all # Run all tests (P1)
+# If you already have GHDL installed
+uv sync                                  # Install dependencies
+uv run python cocotb_tests/run.py --all # Run all VHDL tests (P1)
 ```
 
-**Note:** Local development requires GHDL to be pre-installed:
-- Ubuntu/Debian: `sudo apt-get install ghdl`
+**Install GHDL first:**
+- Ubuntu/Debian: `sudo apt-get install ghdl ghdl-llvm`
 - macOS: `brew install ghdl`
 
 ## Testing Quick Start
 
+### VHDL Simulation Tests (CocoTB)
+
 ```bash
 # Run P1 tests (default, LLM-optimized, <20 lines output)
-uv run python tests/run.py forge_util_clk_divider
+uv run python cocotb_tests/run.py forge_util_clk_divider
 
 # Run P2 tests (comprehensive validation)
-TEST_LEVEL=P2_INTERMEDIATE uv run python tests/run.py forge_util_clk_divider
+TEST_LEVEL=P2_INTERMEDIATE uv run python cocotb_tests/run.py forge_util_clk_divider
 
 # Run with more verbosity
-COCOTB_VERBOSITY=NORMAL uv run python tests/run.py forge_util_clk_divider
+COCOTB_VERBOSITY=NORMAL uv run python cocotb_tests/run.py forge_util_clk_divider
 
-# List all available tests
-uv run python tests/run.py --list
+# List all available VHDL tests
+uv run python cocotb_tests/run.py --list
 
-# Run all tests (P1)
-uv run python tests/run.py --all
+# Run all VHDL tests (P1)
+uv run python cocotb_tests/run.py --all
+```
+
+### Python Unit Tests (pytest)
+
+```bash
+# Run all Python unit tests
+pytest python_tests/
+
+# Run specific test file
+pytest python_tests/test_hierarchical_decoder.py
 ```
 
 ## Documentation Hierarchy

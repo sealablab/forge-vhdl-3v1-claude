@@ -38,13 +38,13 @@ Test Python code using pytest:
 
 ```bash
 # Run all Python unit tests
-pytest tests/
+pytest python_tests/
 
 # Run specific test file
-pytest tests/test_hierarchical_decoder.py
+pytest python_tests/test_hierarchical_decoder.py
 
 # With coverage
-pytest tests/ --cov=python/
+pytest python_tests/ --cov=python/
 ```
 
 ## pytest Configuration
@@ -52,12 +52,12 @@ pytest tests/ --cov=python/
 See `pyproject.toml` for pytest configuration:
 ```toml
 [tool.pytest.ini_options]
-testpaths = ["tests"]
+testpaths = ["python_tests"]
 ```
 
 ## Separation of Concerns
 
-- `tests/` - Python unit tests (pytest)
+- `python_tests/` - Python unit tests (pytest)
 - `cocotb_tests/` - VHDL simulation tests (CocoTB)
 
 Clear separation prevents confusion about test runners and test types.

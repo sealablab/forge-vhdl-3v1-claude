@@ -14,7 +14,7 @@ vhdl-forge-3v1/
 ├── vhdl/                     # VHDL source code
 ├── cocotb_tests/             # CocoTB VHDL simulation tests
 ├── python/                   # Python source code
-├── tests/                    # Python unit tests (pytest)
+├── python_tests/             # Python unit tests (pytest)
 ├── scripts/                  # Standalone scripts
 ├── README.md                 # Main introduction
 ├── CLAUDE.md                 # AI agent guide
@@ -32,7 +32,7 @@ vhdl-forge-3v1/
 
 ### 2. Clear Test Separation
 - `cocotb_tests/` - VHDL simulation (CocoTB + GHDL)
-- `tests/` - Python unit tests (pytest)
+- `python_tests/` - Python unit tests (pytest)
 - **No confusion** about test runners or test types
 
 ### 3. Python Source Organization (`python/`)
@@ -79,7 +79,7 @@ Every directory has a README.md explaining its contents:
 - ✅ `/cocotb_tests/components/README.md` - Component test structure
 - ✅ `/cocotb_tests/platform/README.md` - Platform test patterns
 - ✅ `/cocotb_tests/cocotb_test_wrappers/README.md` - Wrapper explanation
-- ✅ `/tests/README.md` - Python pytest guide
+- ✅ `/python_tests/README.md` - Python pytest guide
 
 ### Python READMEs
 - ✅ `/python/README.md` - Python packages overview
