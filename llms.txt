@@ -1,11 +1,12 @@
 # moku-instrument-forge-vhdl
 
-Shared VHDL utilities for Moku custom instrument development with CocoTB progressive testing.
+**Cloud-first VHDL framework for Moku custom instrument development with AI-assisted workflows**
 
 ## Quick Reference
 
 **What:** Reusable VHDL components with token-efficient CocoTB tests
-**Use:** Git submodule in forge-based projects
+**Where:** Works in Claude Code Web, GitHub Codespaces, local environments
+**Cloud Setup:** One command: `uv run python scripts/cloud_setup_with_ghdl.py`
 **Test:** CocoTB + GHDL filter (P1 tests <20 lines, 98% noise reduction)
 
 ## Structure
@@ -163,32 +164,38 @@ git submodule add https://github.com/sealablab/moku-instrument-forge-vhdl.git li
 
 VHDL files compiled with GHDL via CocoTB test infrastructure.
 
-## Cloud Setup (For GitHub Codespaces / Claude Code Web)
+## Cloud Setup (Recommended - Works Everywhere!)
 
-**🚀 Automated setup with GHDL installation:**
+**🌐 One-command setup for Claude Code Web, GitHub Codespaces, or any container:**
 
 ```bash
 uv run python scripts/cloud_setup_with_ghdl.py
 ```
 
-This script will:
-- Auto-install GHDL + LLVM 18 (Ubuntu/Debian)
-- Create LLVM library symlink (critical!)
-- Set up Python packages in editable mode
-- Validate environment with tests
-- Report readiness status
+**What it does:**
+- ✅ Auto-installs GHDL + LLVM 18 (Ubuntu/Debian containers)
+- ✅ Creates LLVM library symlink (critical for GHDL-LLVM)
+- ✅ Sets up Python virtual environment with UV
+- ✅ Installs all packages in editable mode
+- ✅ Runs validation test to confirm VHDL simulation works
+- ⏱️ Complete setup in ~2-3 minutes
 
-**See:** `docs/CLOUD_SETUP_PROMPT.md` for detailed cloud deployment guide.
+**Result:** Full VHDL development environment in your browser!
 
-## Local Development
+**Detailed guide:** `docs/CLOUD_SETUP_PROMPT.md`
+
+**DevContainer:** Repository includes `.devcontainer/devcontainer.json` for automatic setup in GitHub Codespaces or VS Code Remote Containers.
+
+## Local Development (Pre-installed GHDL)
 
 ```bash
+# If you already have GHDL installed
 uv sync                          # Install dependencies
 uv run python tests/run.py --all # Run all tests (P1)
 ```
 
-**Note:** Local development requires GHDL to be pre-installed:
-- Ubuntu/Debian: `sudo apt-get install ghdl`
+**Install GHDL first:**
+- Ubuntu/Debian: `sudo apt-get install ghdl ghdl-llvm`
 - macOS: `brew install ghdl`
 
 ## Testing Quick Start

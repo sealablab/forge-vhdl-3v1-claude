@@ -1,8 +1,51 @@
 # VHDL-FORGE 3.1
 
-**Batteries-included VHDL framework for Moku custom instrument development**
+**Cloud-first VHDL framework for Moku custom instrument development**
 
 FORGE provides reusable VHDL components, AI-assisted development workflows, and a proven 3-layer architecture for building custom FPGA instruments on Moku platforms (Go/Lab/Pro/Delta).
+
+**🌐 Cloud-Ready:** Works out-of-the-box in Claude Code Web, GitHub Codespaces, and any containerized environment. Full VHDL simulation and testing in your browser.
+
+---
+
+## 🚀 Quick Start (Cloud)
+
+**Using Claude Code Web or GitHub Codespaces?**
+
+📖 **See:** `QUICKSTART_CLOUD.md` for a step-by-step walkthrough!
+
+Or just run this single command:
+
+```bash
+uv run python scripts/cloud_setup_with_ghdl.py
+```
+
+This will:
+- ✅ Auto-install GHDL (VHDL simulator)
+- ✅ Set up Python environment
+- ✅ Install all dependencies
+- ✅ Run sample test to verify everything works
+- ⏱️ Complete in ~2-3 minutes
+
+**Detailed guide:** `docs/CLOUD_SETUP_PROMPT.md`
+
+---
+
+## 🚀 Quick Start (Local)
+
+**For local development with pre-installed GHDL:**
+
+```bash
+git clone https://github.com/sealablab/vhdl-forge-3v1.git
+cd vhdl-forge-3v1
+./scripts/setup.sh
+```
+
+**Verify installation:**
+```bash
+./scripts/validate_setup.sh
+uv run python cocotb_tests/run.py --list
+```
 
 ---
 
@@ -46,78 +89,7 @@ Token-efficient CocoTB testing with **98% output reduction**:
 
 ---
 
-## 🚀 Quick Start
-
-### Prerequisites
-
-Before starting, ensure these dependencies are installed:
-
-#### GHDL (VHDL Simulator) - REQUIRED
-```bash
-# Ubuntu/Debian
-sudo apt-get update
-sudo apt-get install -y ghdl ghdl-llvm
-
-# macOS
-brew install ghdl
-
-# Verify installation
-ghdl --version  # Should show 4.0+
-```
-
-#### Python 3.10+ - REQUIRED
-```bash
-# Ubuntu/Debian
-sudo apt-get install python3 python3-pip
-
-# macOS
-brew install python@3.11
-
-# Verify
-python3 --version  # Should show 3.10 or higher
-```
-
-#### uv (Fast Python Package Manager) - REQUIRED
-```bash
-# Install via curl (all platforms)
-curl -LsSf https://astral.sh/uv/install.sh | sh
-
-# Or via pip
-pip install uv
-
-# Verify
-uv --version
-```
-
-### Installation
-
-**Option 1: Automated Setup (Recommended)**
-```bash
-git clone https://github.com/sealablab/vhdl-forge-3v1.git
-cd vhdl-forge-3v1
-./scripts/setup.sh
-```
-
-The setup script will:
-- Check all prerequisites (GHDL, Python, uv)
-- Install Python dependencies
-- Install workspace packages in editable mode
-- Verify installation
-
-**Option 2: Manual Setup**
-```bash
-git clone https://github.com/sealablab/vhdl-forge-3v1.git
-cd vhdl-forge-3v1
-uv sync
-uv pip install -e python/forge_cocotb -e python/forge_platform -e python/forge_tools
-```
-
-**Verify Installation:**
-```bash
-./scripts/validate_setup.sh
-```
-
-### Your First FORGE Instrument
+## 🎓 Your First FORGE Instrument
 
 1. **Explore the counter example:**
    ```bash
