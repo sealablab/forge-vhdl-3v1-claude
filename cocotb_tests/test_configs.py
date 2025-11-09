@@ -50,7 +50,7 @@ TESTS_CONFIG = {
             VHDL_UTIL / "forge_util_clk_divider.vhd",
         ],
         toplevel="forge_util_clk_divider",
-        test_module="test_forge_util_clk_divider_progressive",
+        test_module="components.test_forge_util_clk_divider_progressive",
         category="utilities",
     ),
 
@@ -63,7 +63,7 @@ TESTS_CONFIG = {
             TESTS / "cocotb_test_wrappers" / "forge_lut_pkg_tb_wrapper.vhd",      # Testbench wrapper
         ],
         toplevel="forge_lut_pkg_tb_wrapper",
-        test_module="test_forge_lut_pkg_progressive",
+        test_module="components.test_forge_lut_pkg_progressive",
         category="packages",
     ),
 
@@ -74,7 +74,7 @@ TESTS_CONFIG = {
             TESTS / "cocotb_test_wrappers" / "forge_voltage_3v3_pkg_tb_wrapper.vhd",
         ],
         toplevel="forge_voltage_3v3_pkg_tb_wrapper",
-        test_module="test_forge_voltage_3v3_pkg_progressive",
+        test_module="components.test_forge_voltage_3v3_pkg_progressive",
         category="packages",
     ),
 
@@ -85,7 +85,7 @@ TESTS_CONFIG = {
             TESTS / "cocotb_test_wrappers" / "forge_voltage_5v0_pkg_tb_wrapper.vhd",
         ],
         toplevel="forge_voltage_5v0_pkg_tb_wrapper",
-        test_module="test_forge_voltage_5v0_pkg_progressive",
+        test_module="components.test_forge_voltage_5v0_pkg_progressive",
         category="packages",
     ),
 
@@ -96,7 +96,7 @@ TESTS_CONFIG = {
             TESTS / "cocotb_test_wrappers" / "forge_voltage_5v_bipolar_pkg_tb_wrapper.vhd",
         ],
         toplevel="forge_voltage_5v_bipolar_pkg_tb_wrapper",
-        test_module="test_forge_voltage_5v_bipolar_pkg_progressive",
+        test_module="components.test_forge_voltage_5v_bipolar_pkg_progressive",
         category="packages",
     ),
 
@@ -108,7 +108,7 @@ TESTS_CONFIG = {
             VHDL_DEBUG / "forge_hierarchical_encoder.vhd",
         ],
         toplevel="forge_hierarchical_encoder",
-        test_module="forge_hierarchical_encoder_tests.P1_forge_hierarchical_encoder_basic",
+        test_module="components.forge_hierarchical_encoder_tests.P1_forge_hierarchical_encoder_basic",
         category="debugging",
     ),
 
@@ -121,7 +121,7 @@ TESTS_CONFIG = {
             TESTS / "test_duts" / "forge_counter.vhd",       # Counter DUT
         ],
         toplevel="forge_counter",
-        test_module="test_platform_counter_poc",
+        test_module="integration.test_platform_counter_poc",
         category="platform",
     ),
 
@@ -131,7 +131,7 @@ TESTS_CONFIG = {
             TESTS / "test_duts" / "platform_test_dummy.vhd",  # Minimal dummy entity
         ],
         toplevel="platform_test_dummy",
-        test_module="test_platform_bpd_deployment",
+        test_module="integration.test_platform_bpd_deployment",
         category="platform",
     ),
 
@@ -143,7 +143,7 @@ TESTS_CONFIG = {
             TESTS / "test_duts" / "forge_counter_with_encoder.vhd",  # Full 3-layer DUT
         ],
         toplevel="forge_counter_with_encoder",
-        test_module="test_platform_oscilloscope_capture",
+        test_module="integration.test_platform_oscilloscope_capture",
         category="platform",
     ),
 
@@ -155,7 +155,7 @@ TESTS_CONFIG = {
             TESTS / "test_duts" / "forge_counter_with_encoder.vhd",  # Full 3-layer DUT
         ],
         toplevel="forge_counter_with_encoder",
-        test_module="test_platform_routing_integration",
+        test_module="integration.test_platform_routing_integration",
         category="platform",
     ),
 
@@ -205,8 +205,9 @@ def validate_test_files() -> dict:
             if not source.exists():
                 missing.append(str(source))
 
-        # Check Python test module
-        test_file = TESTS / f"{config.test_module}.py"
+        # Check Python test module (handle dotted paths like "components.test_name")
+        test_module_path = config.test_module.replace(".", "/") + ".py"
+        test_file = TESTS / test_module_path
         if not test_file.exists():
             missing.append(str(test_file))
 
